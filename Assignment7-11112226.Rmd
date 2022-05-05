@@ -1,0 +1,68 @@
+---
+title: "INFO 3010 - Assignment 7"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## by Lingzi Hong
+### Instructions
+1. This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button, all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
+2. Please download the snowstorm.json from canvas. Fill in the code chunks for following question and submit this R markdown file to the assignment on Canvas. Make sure when you save that you have run all cells, so the outputs displace between the cells.
+3. make sure to replace the directoryID in the filename with your student ID. 
+
+
+### Q1. (5pts) Read the file "2015.csv" to a dataframe. Have a statistical summary of the dataset. 
+```{r}
+library('tidyverse')
+
+df <- read.csv("C:\\Users\\Sam\\Documents\\INFO3010\\Practice assignments\\2015.csv")
+
+Happy_Dataset <- df
+
+Happy_Dataset
+
+```
+
+### Q2. (5pts) Draw a plot with box plot of Happiness_Score for countries in each Region group. Write 2-3 sentences to describe your findings.
+```{r}
+
+ggplot(df, aes(x = Region, y = Happiness_Score, fill = Region)) +
+  geom_boxplot() +
+  stat_summary(fun = "mean", geom = "point" , shape = 8, 
+               size = 10, color = "white")
+
+# The median score in the sub saharan region is 7 
+
+```
+
+### Q3. (10pts) Draw a scatter plot matrix for variables: Happiness_Score, Family, Freedom, Government_Corruption. What is the relation between Happiness_Score and Government_Corruption? What is the relation between Happiness_Score and Freedom?
+```{r}
+pairs(~Happiness_Score+Family+Freedom+Government_Corruption,data = df,lower.panel = panel.smooth)
+
+#The lower the happiness score the lower the levels of freedom
+```
+
+
+### Q4. (10pts) Build a linear regression model to predict Life_Expectancy with Hapiness_Score, GDP_per_Capita, Family and Government_Corruption. 
+```{r}
+df.regression <- lm(Life_Expectancy~Happiness_Score+GDP_per_Capita+Family+Government_Corruption,data=df)
+
+summary(df.regression)
+```
+
+### Q5. (10pts) Check model details. Answer the following questions out of code box: What is the adjusted R-squared value? Is the linear relation significant? 
+
+```{r}
+#The adjusted r squared value is 0.3901, there is 39% less regression line than the mean. GDP, Happiness_Score, Family and Government corruption accounts for 39% of the variation
+```
+
+### Q6. (10pts) Draw diagnostic plots for the model in Q6. 
+```{r}
+par(mfrow = c(2, 2))
+plot(df.regression)
+
+```
+
